@@ -8,10 +8,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using BusinessLayer.Service;
+using BusinessLayer.Interface;
+using RepositoryLayer.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RepositoryLayer.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1
 {
@@ -27,8 +32,14 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllers();
 
+
+            //Database Connectionstring
+            services.AddDbContext<ExpenseManagerContext>(opt=> opt.UseSqlServer(Configuration["ConnectionString"]));
+            services.AddScoped<IUserBL, UserBL>();
+            services.AddScoped<IUserRL, UserRL>();
 
             services.AddSwaggerGen(setup =>
             {
